@@ -1,5 +1,5 @@
-svmFit <- svm(trainDataPCA, industryCodesTrain, kernel = "linear", type = "C")
-svmPred <- predict(svmFit, testDataPCA)
+svmFit <- svm(trainDataPreprocessed, industryCodesTrain, kernel = "linear", type = "C")
+svmPred <- predict(svmFit, testDataPreprocessed)
 
 
 #Calculate confusionMatrix

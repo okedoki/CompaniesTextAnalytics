@@ -28,35 +28,3 @@ mergedData <- websiteDataFrame %>% inner_join(companiesCodeDataFrame, by = c("We
 #Write resulted dataframe to the disk for future processing
 write.table(mergedData, "Output\\MergedCompaniesData.txt", sep = ",", row.names = FALSE)
 
-
-
-
-
-
-#2. Term documents and word of cloud
-
-#m <- as.matrix(dtmWebsiteDoc)
-#v <- sort(rowSums(m), decreasing = TRUE)
-#d <- data.frame(word = names(v), count = v)
-
-#head(d,50)
-
-
-# Generate the WordCloud
-
-#Ggplotversion
-#library(ggplot2)
-#library(ggrepel)
-
-#ggplot(data = d) +
-#aes(x = 1, y = 1, size = count, label = word, col = count) +
-#geom_text_repel(segment.size = 0, force = 100, segment.color = NA) +
-#scale_size(range = c(1, 15), guide = FALSE) +
-#scale_y_continuous(breaks = NULL) +
-#scale_x_continuous(breaks = NULL) +
-#labs(x = '', y = '') +
-#theme_classic()
-
-#Wordcloud 
-#library(wordcloud)
-#wordcloud(d$word, d$count, scale = c(5, 0.5), max.words = 200, random.order = FALSE, rot.per = 0.6, use.r.layout = FALSE, colors = brewer.pal(8, 'Dark2'));

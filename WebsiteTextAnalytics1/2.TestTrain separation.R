@@ -15,15 +15,16 @@ performTmFunctions <- function(websiteText, inputTdm) {
     websiteDoc <- tm_map(websiteDoc, FUN = tm_reduce, tmFuns = tmFuncs)
 
     if (missing(inputTdm)) {
-        TermDocumentMatrix(websiteDoc, control = list(wordLengths = c(3, 7)))
+        DocumentTermMatrix(websiteDoc, control = list(wordLengths = c(4, 9)))
     } else {
-        TermDocumentMatrix(websiteDoc, control = list(dictionary = Terms(inputTdm), wordLengths = c(3, 7)))
+        DocumentTermMatrix(websiteDoc, control = list(dictionary = Terms(inputTdm), wordLengths = c(4, 9)))
     }
 
 }
-
+ 
 websitesFile <- 'Output\\MergedCompaniesData.txt';
 classificationFullData <- read.table(websitesFile, sep = '\t', header = T, fill = T, stringsAsFactors = FALSE, quote = "");
+
 #take out the trash
 classificationFullData <-  classificationFullData[,1:6]
 #classificationFullData <- mergedData
@@ -47,3 +48,16 @@ testDataTDM <- performTmFunctions(testData, trainDataTDM)
 testMatrix <- as.matrix(testDataTDM)
 industryCodesTest <- as.factor(testData$CompanyCode)
 #test_m = factor(t(test_m), levels = c(t(train_m)))
+
+
+trainDataPreprocessed <- trainMatrix
+testDataPreprocessed <- testMatrix
+
+#word of cloud and statistics
+#fullMatrix <- rbind(trainMatrix, testMatrix)
+#fullMatrixIndexies <- colSums(fullMatrix) / nrow(fullMatrix)
+#fullMatrix <- fullMatrix[, fullMatrixIndexies > 0.05]
+#dim(fullMatrix)
+
+#library(wordcloud)
+#wordcloud(colnames(fullMatrix), colSums(fullMatrix), scale = c(5, 0.5), max.words = 200, random.order = FALSE, rot.per = 0.6, use.r.layout = FALSE, colors = brewer.pal(8, 'Dark2'));
