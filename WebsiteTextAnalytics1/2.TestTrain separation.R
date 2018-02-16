@@ -8,10 +8,13 @@ performTmFunctions <- function(websiteText, inputTdm) {
     myReader <- readTabular(mapping = list(content = "Text"))
     websiteDoc <- VCorpus(DataframeSource(websiteText), readerControl = list(reader = myReader))
 
+    #Temporary
+    replaceIjToY <- content_transformer(function(x) gsub("ij", "y", x))
+
     #Remove qqpbreakqq?
     skipWords <- function(x) removeWords(x, c(stopwords("english"), "qqpbreakqq"))
     #tmFuncs <- list(content_transformer(tolower), removePunctuation, removeNumbers, stripWhitespace, skipWords, stemDocument)
-    tmFuncs <- list(removePunctuation, removeNumbers, stripWhitespace, skipWords, stemDocument)
+    tmFuncs <- list(replaceIjToY,removePunctuation, removeNumbers, stripWhitespace, skipWords, stemDocument)
     websiteDoc <- tm_map(websiteDoc, FUN = tm_reduce, tmFuns = tmFuncs)
 
     if (missing(inputTdm)) {
@@ -21,22 +24,26 @@ performTmFunctions <- function(websiteText, inputTdm) {
     }
 
 }
- 
-websitesFile <- 'Output\\MergedCompaniesData.txt';
-classificationFullData <- read.table(websitesFile, sep = '\t', header = T, fill = T, stringsAsFactors = FALSE, quote = "");
+
+websitesFile <- 'Output\\MergedCompaniesData.xlsx';
+
+#File
+#classificationFullData <- read.table(websitesFile, sep = ',', header = T, stringsAsFactors = FALSE, quote = "");
+
+#XLSX
+classificationFullData <- read.xlsx2(websitesFile, sheetName = "Sheet1", col.names = TRUE, row.names = TRUE, append = FALSE)
 
 #take out the trash
 classificationFullData <-  classificationFullData[,1:6]
 #classificationFullData <- mergedData
 #dim(classificationFullData) 
-trainData <- classificationFullData %>% sample_n(550, replace = FALSE)
+trainData <- classificationFullData %>% filter(CompanyCode != "") %>% sample_n(550, replace = FALSE)
 testData <- anti_join(classificationFullData, trainData, by = "Host")
 
 #Subselect trainData with factors that from testData
 trainData <- trainData[trainData$CompanyCode %in% testData$CompanyCode,]
 testData <- testData[testData$CompanyCode %in% trainData$CompanyCode,]
  #Train
-
 trainDataTDM <- performTmFunctions(trainData)
 trainMatrix <- as.matrix(trainDataTDM)
 industryCodesTrain <- as.factor(trainData$CompanyCode)
