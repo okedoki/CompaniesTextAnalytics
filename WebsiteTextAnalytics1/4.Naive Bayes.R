@@ -6,4 +6,4 @@ naiveBayesPred <- predict(naiveBayesFit, testDataPreprocessed)
 #confusionMatrixSVM <- table(pred = svmPred, true = industryCodesTest)
 #ClassificationError
 #industryCodesTest <- factor(industryCodesTest, levels = levels(svmPred))
-classificationErrorSVM <- 1 - sum(naiveBayesPred == industryCodesTest) / length(naiveBayesPred)
+classificationErrorNaiveBayes <- 1 - sum(naiveBayesPred == industryCodesTest) / length(naiveBayesPred)
